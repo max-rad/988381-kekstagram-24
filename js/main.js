@@ -82,7 +82,7 @@ const NAMES = [
 const createCommentData = function (index) {
   return {
     id: ARRAY_OF_COMMENT_ID[index],
-    avatar: 'img/avatar-' + getRandomIntegerNumber(1, 6) + '.svg',
+    avatar: `img/avatar-${  getRandomIntegerNumber(1, 6)  }.svg`,
     message: MESSAGES[getRandomIntegerNumber(0, MESSAGES.length - 1)],
     name: NAMES[getRandomIntegerNumber(0, NAMES.length - 1)],
   };
@@ -90,6 +90,7 @@ const createCommentData = function (index) {
 
 const comments = [];
 
+// eslint-disable-next-line id-length
 for (let i = 0; i < AMOUNT_OF_COMMENTS; i++) {
   comments[i] = createCommentData(i);
 }
@@ -97,7 +98,7 @@ for (let i = 0; i < AMOUNT_OF_COMMENTS; i++) {
 const createObject = function(index) {
   return {
     id: ARRAY_OF_ID[index],
-    url: 'photos/' + ARRAY_OF_URL[index] + '.jpg',
+    url: `photos/${  ARRAY_OF_URL[index]  }.jpg`,
     description: DESCRIPTION[getRandomIntegerNumber(0, DESCRIPTION.length - 1)],
     likes: getRandomIntegerNumber(15, 200),
     comments: comments,
@@ -106,6 +107,7 @@ const createObject = function(index) {
 
 const objects = [];
 
+// eslint-disable-next-line id-length
 for (let i = 0; i < AMOUNT_OF_OBJECTS; i++) {
   objects[i] = createObject(i);
 }
