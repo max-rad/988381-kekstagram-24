@@ -27,6 +27,7 @@ checkMaxStringLength('String', 10);
 function createArrayOfNumbers(start, end) {
   const array = [];
 
+  // eslint-disable-next-line id-length
   for (let i = start; i <= end; i++) {
     array.push(i);
   }
