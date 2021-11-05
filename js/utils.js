@@ -39,4 +39,8 @@ function checkMaxStringLength(string, maxLength) {
 
 checkMaxStringLength('String', 10);
 
-export {getRandomIntegerNumber, createArrayOfNumbers, getArrayOfRandomNumbers};
+function isEscapeKey(evt) {
+  return evt.key === 'Escape';
+}
+
+export {getRandomIntegerNumber, createArrayOfNumbers, getArrayOfRandomNumbers, isEscapeKey};
