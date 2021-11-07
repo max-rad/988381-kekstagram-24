@@ -8,6 +8,8 @@ const socialComment = document.querySelector('.social__comment');
 const socialCommentsCount = document.querySelector('.social__comment-count');
 const socialCommentsLoader = document.querySelector('.social__comments-loader');
 
+const MAX_SHOW_COMMENTS = 5;
+
 const onPopupEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
@@ -17,8 +19,8 @@ const onPopupEscKeydown = (evt) => {
 
 function openModal() {
   bigPicture.classList.remove('hidden');
-  socialCommentsCount.classList.add('hidden');
-  socialCommentsLoader.classList.add('hidden');
+  /*socialCommentsCount.classList.add('hidden');
+  socialCommentsLoader.classList.add('hidden');*/
   body.classList.add('modal-open');
 
   document.addEventListener('keydown', onPopupEscKeydown);
@@ -48,11 +50,22 @@ function showComments(comments) {
 function showBigPicture(picture) {
   bigPicture.querySelector('.big-picture__img').querySelector('img').src = picture.url;
   bigPicture.querySelector('.likes-count').textContent = picture.likes;
-  bigPicture.querySelector('.comments-count').textContent = picture.comments.length;
   bigPicture.querySelector('.social__caption').textContent = picture.description;
 
   openModal();
+  socialCommentsCount.textContent = `${MAX_SHOW_COMMENTS} из ${picture.comments.length} комментариев`;
+  if (picture.comments.length < MAX_SHOW_COMMENTS) {
+    socialCommentsCount.textContent = `${picture.comments.length} из ${picture.comments.length} комментариев`;
+  }
+  if (picture.comments.length <= MAX_SHOW_COMMENTS) {
+    socialCommentsLoader.classList.add('hidden');
+  }
 }
+
+socialCommentsLoader.addEventListener('click', (evt) => {
+  evt.preventDefault();
+
+});
 
 bigPictureCancel.addEventListener('click', (evt) => {
   evt.preventDefault();
