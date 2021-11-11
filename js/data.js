@@ -3,7 +3,7 @@ import * as util from './utils.js';
 const AMOUNT_OF_PICTURES = 25;
 const COMMENTS = {
   min: 1,
-  max: 3,
+  max: 10,
 };
 const LIKES = {
   min: 15,

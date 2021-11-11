@@ -1,4 +1,5 @@
 import {isEscapeKey} from './utils.js';
+import {typeEffects} from './settings.js';
 
 const body = document.querySelector('body');
 const imageUpload = document.querySelector('.img-upload__input');
@@ -9,7 +10,6 @@ const scaleControlValue = document.querySelector('.scale__control--value');
 const scaleControlSmaller =  document.querySelector('.scale__control--smaller');
 const scaleControlBigger = document.querySelector('.scale__control--bigger');
 const effectsList = document.querySelector('.effects__list');
-const effectsRadio = effectsList.querySelectorAll('.effects__radio');
 const effectLevel = document.querySelector('.effect-level');
 const effectLevelValue = document.querySelector('.effect-level__value');
 const effectLevelSlider = document.querySelector('.effect-level__slider');
@@ -21,26 +21,24 @@ const HASHTAG_MAX_LENGTH = 20;
 const HASHTAG_MAX_AMOUNT = 5;
 const COMMENT_MAX_LENGTH = 140;
 
+const slider = noUiSlider.create(effectLevelSlider, {
+  start: 1,
+  step: 0.1,
+  connect: 'lower',
+  range: {
+    min: 0,
+    max: 1,
+  },
+});
+
 let scaleValue = 100;
 const effectValues = {
-  'none': () => {
-    uploadPreview.style.filter = 'none';
-  },
-  'chrome': (effectValue) => {
-    uploadPreview.style.filter = `grayscale(${effectValue})`;
-  },
-  'sepia': (effectValue) => {
-    uploadPreview.style.filter = `sepia(${effectValue})`;
-  },
-  'marvin': (effectValue) => {
-    uploadPreview.style.filter = `invert(${effectValue}%)`;
-  },
-  'phobos': (effectValue) => {
-    uploadPreview.style.filter = `blur(${effectValue}px)`;
-  },
-  'heat': (effectValue) => {
-    uploadPreview.style.filter = `brightness(${effectValue})`;
-  },
+  'none': () => 'none',
+  'chrome': (effectValue) => `grayscale(${effectValue})`,
+  'sepia': (effectValue) => `sepia(${effectValue})`,
+  'marvin': (effectValue) => `invert(${effectValue}%)`,
+  'phobos': (effectValue) => `blur(${effectValue}px)`,
+  'heat': (effectValue) => `brightness(${effectValue})`,
 };
 const SCALE_BORDERS = {
   min: 25,
@@ -103,82 +101,23 @@ const maxScale = () => {
   });
 };
 
-noUiSlider.create(effectLevelSlider, {
-  start: 1,
-  step: 0.1,
-  range: {
-    min: 0,
-    max: 1,
-  },
-});
-
 const applyEffect = () => {
-  effectsRadio.forEach((effect) => {
-    effect.addEventListener('click', () => {
-      effectLevel.classList.remove('hidden');
-      uploadPreview.removeAttribute('class');
-      uploadPreview.classList.add(`effects__preview--${effect.value}`);
+  effectsList.addEventListener('change', (evt) => {
+    const currentEffect = evt.target.value;
+    effectLevel.classList.remove('hidden');
+    uploadPreview.removeAttribute('class');
+    uploadPreview.classList.add(`effects__preview--${currentEffect}`);
 
-      effectLevelSlider.noUiSlider.on('update', (values, handle) => {
-        effectLevelValue.value = values[handle];
-        effectValues[effect.value](effectLevelValue.value);
-      });
-      switch (effect.value) {
-        case 'chrome':
-          effectLevelSlider.noUiSlider.updateOptions({
-            start: 1,
-            step: 0.1,
-            range: {
-              min: 0,
-              max: 1,
-            },
-          });
-          break;
-        case 'sepia':
-          effectLevelSlider.noUiSlider.updateOptions({
-            start: 1,
-            step: 0.1,
-            range: {
-              min: 0,
-              max: 1,
-            },
-          });
-          break;
-        case 'marvin':
-          effectLevelSlider.noUiSlider.updateOptions({
-            start: 100,
-            step: 1,
-            range: {
-              min: 0,
-              max: 100,
-            },
-          });
-          break;
-        case 'phobos':
-          effectLevelSlider.noUiSlider.updateOptions({
-            start: 3,
-            step: 0.1,
-            range: {
-              min: 0,
-              max: 3,
-            },
-          });
-          break;
-        case 'heat':
-          effectLevelSlider.noUiSlider.updateOptions({
-            start: 3,
-            step: 0.1,
-            range: {
-              min: 1,
-              max: 3,
-            },
-          });
-          break;
-        case 'none':
-          effectLevel.classList.add('hidden');
-          break;
-      }
+    slider.on('update', (values, handle) => {
+      effectLevelValue.value = values[handle];
+      uploadPreview.style.filter = effectValues[currentEffect](effectLevelValue.value);
     });
+
+    if (currentEffect === 'none') {
+      effectLevel.classList.add('hidden');
+    } else {
+      slider.updateOptions(typeEffects[currentEffect]);
+    }
   });
 };
 
