@@ -33,18 +33,44 @@ function closeModal() {
   document.removeEventListener('keydown', onPopupEscKeydown);
 }
 
-function showComments(comments) {
+function createCommentFragment(comment) {
+  const commentFragment = socialComment.cloneNode(true);
+  commentFragment.querySelector('.social__picture').src = comment.avatar;
+  commentFragment.querySelector('.social__picture').alt = comment.name;
+  commentFragment.querySelector('.social__text').textContent = comment.message;
+  return commentFragment;
+}
+
+function addComments(comments) {
   const commentContainerFragment = document.createDocumentFragment();
   comments.forEach((comment) => {
-    const commentFragment = socialComment.cloneNode(true);
-    commentFragment.querySelector('.social__picture').src = comment.avatar;
-    commentFragment.querySelector('.social__picture').alt = comment.name;
-    commentFragment.querySelector('.social__text').textContent = comment.message;
-
-    commentContainerFragment.append(commentFragment);
+    commentContainerFragment.append(createCommentFragment(comment));
   });
+
   socialComments.innerHTML = '';
   socialComments.append(commentContainerFragment);
+}
+
+function showComments(comments) {
+  let loadedComments = 0;
+  if (comments.length <= MAX_SHOW_COMMENTS) {
+    addComments(comments);
+  } else {
+    addComments(comments.slice(0, MAX_SHOW_COMMENTS));
+    loadedComments += MAX_SHOW_COMMENTS;
+  }
+
+  socialCommentsLoader.addEventListener('click', () => {
+    loadedComments += MAX_SHOW_COMMENTS;
+    if (loadedComments >= comments.length) {
+      addComments(comments);
+      socialCommentsLoader.classList.add('hidden');
+      socialCommentsCount.textContent = `${comments.length} из ${comments.length} комментариев`;
+    } else {
+      addComments(comments.slice(0, loadedComments));
+      socialCommentsCount.textContent = `${loadedComments} из ${comments.length} комментариев`;
+    }
+  });
 }
 
 function showBigPicture(picture) {
@@ -59,13 +85,10 @@ function showBigPicture(picture) {
   }
   if (picture.comments.length <= MAX_SHOW_COMMENTS) {
     socialCommentsLoader.classList.add('hidden');
+  } else {
+    socialCommentsLoader.classList.remove('hidden');
   }
 }
-
-socialCommentsLoader.addEventListener('click', (evt) => {
-  evt.preventDefault();
-
-});
 
 bigPictureCancel.addEventListener('click', (evt) => {
   evt.preventDefault();
