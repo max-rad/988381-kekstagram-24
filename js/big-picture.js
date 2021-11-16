@@ -19,8 +19,6 @@ const onPopupEscKeydown = (evt) => {
 
 function openModal() {
   bigPicture.classList.remove('hidden');
-  /*socialCommentsCount.classList.add('hidden');
-  socialCommentsLoader.classList.add('hidden');*/
   body.classList.add('modal-open');
 
   document.addEventListener('keydown', onPopupEscKeydown);
@@ -85,9 +83,8 @@ function showBigPicture(picture) {
   }
   if (picture.comments.length <= MAX_SHOW_COMMENTS) {
     socialCommentsLoader.classList.add('hidden');
-  } else {
-    socialCommentsLoader.classList.remove('hidden');
   }
+  return socialCommentsLoader.classList.remove('hidden');
 }
 
 bigPictureCancel.addEventListener('click', (evt) => {

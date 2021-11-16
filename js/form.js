@@ -1,7 +1,9 @@
-import {isEscapeKey} from './utils.js';
+import {errorAlert, isEscapeKey, successAlert} from './utils.js';
 import {typeEffects} from './settings.js';
+import {sendData} from './api.js';
 
 const body = document.querySelector('body');
+const uploadForm = document.querySelector('.img-upload__form');
 const imageUpload = document.querySelector('.img-upload__input');
 const uploadOverlay = document.querySelector('.img-upload__overlay');
 const uploadPreview = document.querySelector('.img-upload__preview img');
@@ -168,6 +170,9 @@ textHashtags.addEventListener('input', () => {
 
   if (invalidMessage.length > 0) {
     textHashtags.setCustomValidity(invalidMessage.join('.\n'));
+    textHashtags.style.borderColor = 'red';
+  } else {
+    textHashtags.style.borderColor = 'lightgrey';
   }
   textHashtags.reportValidity();
 });
@@ -177,9 +182,28 @@ textDescription.addEventListener('input', () => {
 
   if (commentLength > COMMENT_MAX_LENGTH) {
     textDescription.setCustomValidity('Длина комментария не может составлять больше 140 символов');
+    textDescription.style.borderColor = 'red';
+  } else {
+    textDescription.style.borderColor = 'lightgrey';
   }
   textDescription.reportValidity();
 });
 
-export {showFilter, minScale, maxScale, applyEffect};
+const setUserFormSubmit = (onSuccess) => {
+  uploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    sendData(
+      () => {
+        successAlert();
+        onSuccess();
+      },
+      () => {
+        errorAlert();
+      },
+      new FormData(evt.target),
+    );
+  });
+};
+
+export {showFilter,closeFilter, minScale, maxScale, applyEffect, setUserFormSubmit};
 
