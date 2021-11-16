@@ -1,4 +1,4 @@
-import {dataAlert, showAlert} from './utils.js';
+import {dataAlert} from './utils.js';
 
 const getData = (onSuccess) => {
   fetch('https://24.javascript.pages.academy/kekstagram/data')
@@ -23,11 +23,11 @@ const sendData = (onSuccess, onFail, body) => {
       if (response.ok) {
         onSuccess();
       } else {
-        showAlert('Не удалось отправить форму. Попробуйте ещё раз');
+        onFail();
       }
     })
     .catch(() => {
-      showAlert('Не удалось отправить форму. Попробуйте ещё раз');
+      onFail();
     });
 };
 

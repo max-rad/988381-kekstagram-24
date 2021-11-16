@@ -1,4 +1,4 @@
-import {errorAlert, isEscapeKey, successAlert} from './utils.js';
+import {isEscapeKey, showAlert, successAlert} from './utils.js';
 import {typeEffects} from './settings.js';
 import {sendData} from './api.js';
 
@@ -198,7 +198,7 @@ const setUserFormSubmit = (onSuccess) => {
         onSuccess();
       },
       () => {
-        errorAlert();
+        showAlert('Не удалось отправить форму. Попробуйте ещё раз');
       },
       new FormData(evt.target),
     );
