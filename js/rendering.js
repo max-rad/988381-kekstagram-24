@@ -1,4 +1,3 @@
-import {createPictureData} from './data.js';
 import {showBigPicture, showComments} from './big-picture.js';
 
 const pictureContainer = document.querySelector('.pictures');
@@ -6,8 +5,8 @@ const pictureTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
-const createPictures = () => {
-  const pictures = createPictureData();
+const createPictures = (pictures) => {
+  /*const pictures = createPictureData();*/
   const pictureContainerFragment = document.createDocumentFragment();
   pictures.forEach((picture) => {
     const pictureElement = pictureTemplate.cloneNode(true);
@@ -26,6 +25,13 @@ const createPictures = () => {
   pictureContainer.appendChild(pictureContainerFragment);
 };
 
-export {createPictures};
+const clearPictures = () => {
+  const pictures = document.querySelectorAll('.picture');
+  pictures.forEach((picture) => {
+    picture.remove();
+  });
+};
+
+export {createPictures, clearPictures};
 
 
