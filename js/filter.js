@@ -1,30 +1,30 @@
 import {clearPictures, createPictures} from './rendering.js';
 import {createArrayOfNumbers, debounce, getArrayOfRandomNumbers} from './utils.js';
 
+const MAX_PICTURES = 10;
+
 const imgDefaultFilter = document.querySelector('#filter-default');
 const imgRandomFilter = document.querySelector('#filter-random');
 const imgDiscussedFilter = document.querySelector('#filter-discussed');
 
-const MAX_PICTURES = 10;
-
-const setActiveButton = (btn) => {
+function setActiveButton(btn) {
   const buttons = document.querySelectorAll('.img-filters__button');
   buttons.forEach((button) => {
     button.classList.remove('img-filters__button--active');
   });
   btn.classList.add('img-filters__button--active');
-};
+}
 
-const setDefaultPictures = (pictures) => {
+function setDefaultPictures(pictures) {
   imgDefaultFilter.addEventListener('click', debounce((evt) => {
     evt.preventDefault();
     setActiveButton(imgDefaultFilter);
     clearPictures();
     createPictures(pictures);
   }));
-};
+}
 
-const setRandomPictures = (pictures) => {
+function setRandomPictures(pictures) {
   imgRandomFilter.addEventListener('click', debounce((evt) => {
     evt.preventDefault();
     setActiveButton(imgRandomFilter);
@@ -36,9 +36,9 @@ const setRandomPictures = (pictures) => {
     }
     createPictures(sortedPictures);
   }));
-};
+}
 
-const setDiscussedPictures = (pictures) => {
+function setDiscussedPictures(pictures) {
   imgDiscussedFilter.addEventListener('click', debounce((evt) => {
     evt.preventDefault();
     setActiveButton(imgDiscussedFilter);
@@ -46,6 +46,6 @@ const setDiscussedPictures = (pictures) => {
     const sortedPictures = pictures.slice().sort((a, b) => b.comments.length - a.comments.length);
     createPictures(sortedPictures);
   }));
-};
+}
 
 export {setDefaultPictures, setRandomPictures, setDiscussedPictures};

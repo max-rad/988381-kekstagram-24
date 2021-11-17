@@ -1,6 +1,6 @@
 import {dataAlert} from './utils.js';
 
-const getData = (onSuccess) => {
+function getData(onSuccess) {
   fetch('https://24.javascript.pages.academy/kekstagram/data')
     .then((response) => response.json())
     .then((photos) => {
@@ -9,9 +9,9 @@ const getData = (onSuccess) => {
     .catch(() => {
       dataAlert();
     });
-};
+}
 
-const sendData = (onSuccess, onFail, body) => {
+function sendData(onSuccess, onFail, body) {
   fetch(
     'https://24.javascript.pages.academy/kekstagram',
     {
@@ -29,6 +29,6 @@ const sendData = (onSuccess, onFail, body) => {
     .catch(() => {
       onFail();
     });
-};
+}
 
 export {getData, sendData};

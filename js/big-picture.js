@@ -1,5 +1,7 @@
 import {isEscapeKey} from './utils.js';
 
+const MAX_SHOW_COMMENTS = 5;
+
 const body = document.querySelector('body');
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureCancel = bigPicture.querySelector('.big-picture__cancel');
@@ -8,14 +10,12 @@ const socialComment = document.querySelector('.social__comment');
 const socialCommentsCount = document.querySelector('.social__comment-count');
 const socialCommentsLoader = document.querySelector('.social__comments-loader');
 
-const MAX_SHOW_COMMENTS = 5;
-
-const onPopupEscKeydown = (evt) => {
+function onPopupEscKeydown(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeModal();
   }
-};
+}
 
 function openModal() {
   bigPicture.classList.remove('hidden');
@@ -81,8 +81,9 @@ function showBigPicture(picture) {
   if (picture.comments.length < MAX_SHOW_COMMENTS) {
     socialCommentsCount.textContent = `${picture.comments.length} из ${picture.comments.length} комментариев`;
   }
+
   if (picture.comments.length <= MAX_SHOW_COMMENTS) {
-    socialCommentsLoader.classList.add('hidden');
+    return socialCommentsLoader.classList.add('hidden');
   }
   return socialCommentsLoader.classList.remove('hidden');
 }
