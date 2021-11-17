@@ -26,6 +26,7 @@ function getArrayOfRandomNumbers(array) {
 function isEscapeKey(evt) {
   return evt.key === 'Escape';
 }
+
 function onEscErrorKeydown(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();

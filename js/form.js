@@ -133,7 +133,7 @@ textDescription.addEventListener('keydown', (evt) => {
 });
 
 textHashtags.addEventListener('input', () => {
-  const invalidMessage = [];
+  const invalidMessages = [];
   textHashtags.setCustomValidity('');
   const hashtagText = textHashtags.value.toLowerCase().trim();
   const hashtags = hashtagText.split(/\s+/);
@@ -142,35 +142,35 @@ textHashtags.addEventListener('input', () => {
   }
 
   if (hashtags.some((hashtag) => hashtag[0] !== '#')) {
-    invalidMessage.push('Хэштег должен начинаться с символа #');
+    invalidMessages.push('Хэштег должен начинаться с символа #');
   }
 
   if (hashtags.some((hashtag) => HASHTAG_PATTERN.test(hashtag.slice(1))) === true) {
-    invalidMessage.push('Хэштег не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.');
+    invalidMessages.push('Хэштег не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.');
   }
 
   if (hashtags.some((hashtag) => hashtag === '#')) {
-    invalidMessage.push('Хэштег не может состоять только из одной решетки');
+    invalidMessages.push('Хэштег не может состоять только из одной решетки');
   }
 
   if (hashtags.some((hashtag) => hashtag.length > HASHTAG_MAX_LENGTH)) {
-    invalidMessage.push('Максимальная длина одного хэш-тега 20 символов, включая решётку');
+    invalidMessages.push('Максимальная длина одного хэш-тега 20 символов, включая решётку');
   }
 
   if (hashtags.some((hashtag) => hashtag.indexOf('#', 1) >= 1)) {
-    invalidMessage.push('Хэш-теги разделяются пробелами');
+    invalidMessages.push('Хэш-теги разделяются пробелами');
   }
 
   if (hashtags.some((hashtag, i, array) => array.indexOf(hashtag, i + 1) >= i + 1)) {
-    invalidMessage.push('Один и тот же хэш-тег не может быть использован дважды');
+    invalidMessages.push('Один и тот же хэш-тег не может быть использован дважды');
   }
 
   if (hashtags.length > HASHTAG_MAX_AMOUNT) {
-    invalidMessage.push('Нельзя указать больше пяти хэш-тегов');
+    invalidMessages.push('Нельзя указать больше пяти хэш-тегов');
   }
 
-  if (invalidMessage.length > 0) {
-    textHashtags.setCustomValidity(invalidMessage.join('.\n'));
+  if (invalidMessages.length > 0) {
+    textHashtags.setCustomValidity(invalidMessages.join('.\n'));
     textHashtags.style.borderColor = 'red';
   } else {
     textHashtags.style.borderColor = 'lightgrey';
