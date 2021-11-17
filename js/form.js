@@ -1,6 +1,26 @@
-import {isEscapeKey, showAlert, successAlert} from './utils.js';
+import {errorAlert, isEscapeKey, successAlert} from './utils.js';
 import {typeEffects} from './settings.js';
 import {sendData} from './api.js';
+
+const HASHTAG_PATTERN = /[^A-Za-zА-Яа-яЁё0-9]{1,19}/;
+const HASHTAG_MAX_LENGTH = 20;
+const HASHTAG_MAX_AMOUNT = 5;
+const COMMENT_MAX_LENGTH = 140;
+const SCALE_BORDERS = {
+  min: 25,
+  max: 100,
+};
+const SCALE_STEP = 25;
+
+let scaleValue = 100;
+const effectValues = {
+  'none': () => 'none',
+  'chrome': (effectValue) => `grayscale(${effectValue})`,
+  'sepia': (effectValue) => `sepia(${effectValue})`,
+  'marvin': (effectValue) => `invert(${effectValue}%)`,
+  'phobos': (effectValue) => `blur(${effectValue}px)`,
+  'heat': (effectValue) => `brightness(${effectValue})`,
+};
 
 const body = document.querySelector('body');
 const uploadForm = document.querySelector('.img-upload__form');
@@ -18,11 +38,6 @@ const effectLevelSlider = document.querySelector('.effect-level__slider');
 const textHashtags = document.querySelector('.text__hashtags');
 const textDescription = document.querySelector('.text__description');
 
-const HASHTAG_PATTERN = /[^A-Za-zА-Яа-яЁё0-9]{1,19}/;
-const HASHTAG_MAX_LENGTH = 20;
-const HASHTAG_MAX_AMOUNT = 5;
-const COMMENT_MAX_LENGTH = 140;
-
 const slider = noUiSlider.create(effectLevelSlider, {
   start: 1,
   step: 0.1,
@@ -33,27 +48,12 @@ const slider = noUiSlider.create(effectLevelSlider, {
   },
 });
 
-let scaleValue = 100;
-const effectValues = {
-  'none': () => 'none',
-  'chrome': (effectValue) => `grayscale(${effectValue})`,
-  'sepia': (effectValue) => `sepia(${effectValue})`,
-  'marvin': (effectValue) => `invert(${effectValue}%)`,
-  'phobos': (effectValue) => `blur(${effectValue}px)`,
-  'heat': (effectValue) => `brightness(${effectValue})`,
-};
-const SCALE_BORDERS = {
-  min: 25,
-  max: 100,
-};
-const SCALE_STEP = 25;
-
-const onPopupEscKeydown = (evt) => {
+function onPopupEscKeydown(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeFilter();
   }
-};
+}
 
 function openFilter() {
   uploadOverlay.classList.remove('hidden');
@@ -62,6 +62,7 @@ function openFilter() {
   effectLevel.classList.add('hidden');
   document.addEventListener('keydown', onPopupEscKeydown);
 }
+
 function closeFilter() {
   uploadOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
@@ -83,7 +84,7 @@ uploadCancel.addEventListener('click', (evt) => {
   closeFilter();
 });
 
-const minScale = () => {
+function minScale() {
   scaleControlSmaller.addEventListener('click', () => {
     if (scaleValue !== SCALE_BORDERS.min) {
       scaleControlValue.value = `${scaleValue - SCALE_STEP}%`;
@@ -91,9 +92,9 @@ const minScale = () => {
       uploadPreview.style.transform = `scale(${scaleValue/100})`;
     }
   });
-};
+}
 
-const maxScale = () => {
+function maxScale() {
   scaleControlBigger.addEventListener('click', () => {
     if (scaleValue !== SCALE_BORDERS.max) {
       scaleControlValue.value = `${scaleValue + SCALE_STEP}%`;
@@ -101,9 +102,9 @@ const maxScale = () => {
       uploadPreview.style.transform = `scale(${scaleValue/100})`;
     }
   });
-};
+}
 
-const applyEffect = () => {
+function applyEffect() {
   effectsList.addEventListener('change', (evt) => {
     const currentEffect = evt.target.value;
     effectLevel.classList.remove('hidden');
@@ -121,7 +122,7 @@ const applyEffect = () => {
       slider.updateOptions(typeEffects[currentEffect]);
     }
   });
-};
+}
 
 textHashtags.addEventListener('keydown', (evt) => {
   evt.stopPropagation();
@@ -189,7 +190,7 @@ textDescription.addEventListener('input', () => {
   textDescription.reportValidity();
 });
 
-const setUserFormSubmit = (onSuccess) => {
+function setUserFormSubmit(onSuccess) {
   uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     sendData(
@@ -198,12 +199,12 @@ const setUserFormSubmit = (onSuccess) => {
         onSuccess();
       },
       () => {
-        showAlert('Не удалось отправить форму. Попробуйте ещё раз');
+        errorAlert();
       },
       new FormData(evt.target),
     );
   });
-};
+}
 
 export {showFilter,closeFilter, minScale, maxScale, applyEffect, setUserFormSubmit};
 

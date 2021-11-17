@@ -43,10 +43,6 @@ const typeEffects = {
       max: 3,
     },
   },
-
-  /*none: {
-    effectLevel.classList.add('hidden');
-  },*/
 };
 
 export {typeEffects};
