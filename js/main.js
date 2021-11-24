@@ -11,7 +11,6 @@ getData((pictures) => {
   setRandomPictures(pictures);
   setDiscussedPictures(pictures);
 });
-
 showFilter();
 setUserFormSubmit(closeFilter);
 minScale();
