@@ -6,11 +6,11 @@ const HASHTAG_PATTERN = /[^A-Za-zА-Яа-яЁё0-9]{1,19}/;
 const HASHTAG_MAX_LENGTH = 20;
 const HASHTAG_MAX_AMOUNT = 5;
 const COMMENT_MAX_LENGTH = 140;
+const SCALE_STEP = 25;
 const SCALE_BORDERS = {
   min: 25,
   max: 100,
 };
-const SCALE_STEP = 25;
 
 let scaleValue = 100;
 const effectValues = {
